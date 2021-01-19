@@ -1,0 +1,7 @@
+.ionide
+.vscode
+node_modules
+stars
+stats
+obj
+bin
