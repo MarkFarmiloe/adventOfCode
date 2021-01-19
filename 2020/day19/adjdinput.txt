@@ -57,7 +57,8 @@
 62: 86 69 | 83 9
 42: 125 69 | 70 9
 71: 69 112 | 9 114
-8: 42
+8: "((a(((((ab|bb)b|aba)a|((a|b)(a|b)a|(b(a|b)|aa)b)b)b|((a(ba|bb)|b(a|b)(a|b))a|(a(ba|aa)|b(a|b)(a|b))b)a)b|(b((b(ba|bb)|aab)b|(b(b(a|b)|aa)|aab)a)|a(b(b(a|b)(a|b)|a(b(a|b)|aa))|a(aab|(ba|aa)a)))a)|b((b(b(baa|aba)|a(b(ab|bb)|a(bb|aa)))|a((bba|(b(a|b)|aa)b)b|(b(b(a|b)|aa)|a(ba|bb))a))a|(a(((ba|aa)b|aba)b|(aab|(ab|bb)a)a)|b(b((ab|ba)a|(ba|bb)b)|a((ba|aa)a|(ba|bb)b)))b))a|((((((ba|aa)b|aba)a|(b(bb|aa)|a(a|b)(a|b))b)b|(a((ba|aa)a|(ba|a(a|b))b)|b((bb|aa)b|baa))a)a|(a(((a(a|b)|bb)a|(a|b)(a|b)b)a|(aaa|b(ba|aa))b)|b(aaba|b(a(ba|aa)|b(b(a|b)|aa))))b)a|(((((ba|bb)b|(bb|aa)a)a|(bab|a(ab|bb))b)b|(a((aa|ab)b|(ab|bb)a)|b(a|b)(a(a|b)|bb))a)a|(a(baab|(baa|bbb)a)|b(((bb|aa)b|baa)a|(bab|a(b(a|b)|aa))b))b)b)b)+"
+138: 42 
 131: 69 44 | 9 7
 88: 69 9 | 9 69
 87: 15 69 | 7 9
@@ -77,7 +78,8 @@
 90: 69 96 | 9 68
 53: 111 9 | 27 69
 125: 69 72 | 9 22
-11: 42 31
+11: 42 31 | 140
+137: 42 31
 23: 9 69 | 9 9
 114: 69 105 | 9 131
 81: 53 69 | 29 9
@@ -134,6 +136,11 @@
 100: 9 101 | 69 80
 106: 69 69
 79: 44 69 | 65 9
+140: 42 42 31 31 | 141
+141: 42 42 42 31 31 31 | 142
+142: 42 42 42 42 31 31 31 31 | 143
+143: 42 42 42 42 42 31 31 31 31 31 | 144
+144: 42 42 42 42 42 42 31 31 31 31 31 31
 
 bbabbbaaaaaabbabbaabaaabbaababbbabbbabbbababbbbbbbbabbbbbbabaaaa
 aabbbabbabaaaababbbaaabb
