@@ -22,7 +22,7 @@ const filename = (ts) => {
 }
 
 const job = (timestamp) => {
-    https.get('https://adventofcode.com/2020/stats', (res) => {
+    https.get('https://adventofcode.com/2021/stats', (res) => {
     const { statusCode } = res;
     const contentType = res.headers['content-type'];
     let error;
