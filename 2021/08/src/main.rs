@@ -61,12 +61,14 @@ fn main() {
     //     // console.log(number);
     //     return a + number;
     // }, 0);
-    // console.log(count2);
     let display = displays[0];
     println!("{:#?}", decode_ins(display.0));
-    // let count2 = displays.iter().fold(0, |a, display|
-    //     let digits = decode_ins((*display).0);
-    //     a + 1
-    // );
-    // println!("{:#?}", count2);
+    let count2 = displays.fold(0, |a, (ins, outs)| {
+        let digits = decode_ins(ins);
+        let number = outs.fold(0, |a, out| {
+            a * 10 + digits
+        });
+        a + number
+    });
+    println!("{:#?}", count2);
 }
