@@ -1,6 +1,5 @@
 'use strict';
 const fs = require("fs");
-const path = require("path/posix");
 
 const getData = (data) => {
     let pairs = data
