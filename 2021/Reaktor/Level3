@@ -1,0 +1,47 @@
+3000 REM Here is similar starting code as before
+3010 LET player_row = PEEK(1)
+3020 LET player_col = PEEK(2)
+3025 LET offset = 16 + player_row * width + player_col
+3030 REM this array tells whether there's a wall in that direction
+3035 REM 0=right, 1=down, 2=left, 3=up
+3040 DIM dirs(4)
+3042 LET dirs(0) = PEEK(offset + 1)
+3044 LET dirs(1) = PEEK(offset + width)
+3046 LET dirs(2) = PEEK(offset - 1)
+3048 LET dirs(3) = PEEK(offset - width)
+3050 FOR i = 0 TO 3 : REM replace doors
+3051     IF dirs(i) >= 20 THEN
+3052         IF keys(dirs(i)-20)=0 THEN 
+3053           dirs(i) = 1 
+3054         ELSE 
+3055           dirs(i) = 0
+3056       END IF 
+3057     END IF 
+3058 NEXT
+3060 REM write the next dir at memory address 0
+3062 IF pDir THEN GOTO 3066
+3064 LET pDir = -4
+3066 GOSUB 3100 : REM Block off unnecessary routes
+3070 REM write the next dir at memory address 0
+3072 LET newDir = pDir + 3
+3074 IF newDir > 3 THEN newDir = newDir - 4
+3076 IF dirs(newDir) <> 1 THEN 
+3078   pDir = newDir : GOTO 3086
+3080 END IF
+3082 newDir = newDir + 1
+3084 GOTO 3074
+3086 POKE 0, pDir
+3088 RETURN
+
+3100 IF pDir < 0 THEN pDir = pDir + 4 : RETURN
+3102 
+
+3158 RETURN
+3160 REM here's an interactive version
+3170 GET key
+3180 IF key = -2 THEN POKE 0, 1 : RETURN : REM no user present
+3190 IF key = -1 THEN PAUSE 100: GOTO 3170 : REM wait for input
+3200 IF key = 13 THEN STOP : REM user wants out
+3210 IF key < 4 AND dirs(key) <> 1 THEN POKE 0, key : RETURN
+3220 PAUSE 100 : GOTO 3170 : REM ignore key, wait for next one
+3230 POKE 0, key : RETURN

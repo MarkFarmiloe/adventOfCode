@@ -1,0 +1,25 @@
+600 REM print maze
+610 REM clear the screen
+612 IF steps < 1 THEN
+614   LET pRow = 1: pCol = 1
+620   CLS
+630   LOCATE 2,1 : REM top left corner of the maze
+640   FOR row = 0 TO height-1
+650     FOR col = 0 TO width-1
+710       LET cell = PEEK(16 + row * width + col)
+720       IF cell = 0 THEN PRINT " ";
+730       IF cell = 1 THEN PRINT "X";
+750     NEXT col
+760     PRINT ""
+770   NEXT row
+771 END IF
+772 REM draw player
+773 LOCATE 2 + pRow, 1 + pCol
+774 PRINT " ";
+775 pRow = Peek(1) : pCol = PEEK(2)
+776 LOCATE 2 + pRow, 1 + pCol
+777 PRINT "@";
+780 REM print some statistics on top
+790 LOCATE 1, 10 : PRINT "STEPS: "; steps
+800 steps = steps + 1
+810 RETURN
