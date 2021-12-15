@@ -46,12 +46,32 @@ const calcLcp = grid => {
     return g;
 }
 
+const bigUp = grid => {
+    const bg = [];
+    for (let i = 0; i < 5; i++) {
+        for (let r = 0; r < grid.length; r++) {
+            let br = [];
+            for (let j = 0; j < 5; j++) {
+                const offset = i + j;
+                const row = grid[r].map(c => { c += offset; return c > 9 ? c - 9 : c; });
+                br = br.concat(row);
+            }
+            bg.push(br);
+        }      
+    }
+    return bg;
+}
+
 const process = (err, data) => {
     if (err) throw err;
-    let grid = getData(data);    
-    console.log(grid);
+    const grid = getData(data);    
+    // console.log(grid);
     let lcp = calcLcp(grid);
-    console.log(lcp[0], lcp[1], lcp[98], lcp[99], lcp[lcp.length - 1][lcp[0].length - 1]);
+    console.log(lcp[lcp.length - 1][lcp[0].length - 1]);
+    const bigGrid = bigUp(grid);
+    // console.log(bigGrid);
+    lcp = calcLcp(bigGrid);
+    console.log(lcp[lcp.length - 1][lcp[0].length - 1]);
 }
 
 // fs.readFile("./test.txt", 'utf8', process);
