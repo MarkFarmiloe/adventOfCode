@@ -32,7 +32,7 @@ const parseHex = d => {
 
 const getValue = (c, i, o, n) => {
     const digits = Math.floor((o + n + 3) / 4);
-    let number = c[i] % (2 ** (4 - o));
+    let number = c[i] % (2 ** (4 - o)); //loose the already used bits;
     for (let j = 1; j < digits; j++) {
         number = number * 16 + c[i + j];        
     };
@@ -58,9 +58,7 @@ const getNumber = (c, i, o) => {
 const decode = (code, index = 0, offset = 0) => {
     let packet = {};
     [packet.version, index, offset] = getValue(code, index, offset, 3);
-    // console.log("V", packet.version, index, offset);
     [packet.type, index, offset] = getValue(code, index, offset, 3);
-    // console.log("T", packet.type, index, offset);
     if (packet.type === 4) {
         [packet.value, index, offset] = getNumber(code, index, offset);
     } else {
@@ -135,14 +133,10 @@ const packetValue = packet => {
 const process = (err, data) => {
     if (err) throw err;
     const codes = getData(data);    
-    // console.log(codes);
     codes.forEach(code => {
         const [packet, index, offset] = decode(code);
-        // console.log(packet);
-        // if (packet.children) packet.children.forEach(child => console.log(child));
         console.log(versionSum(packet));
         console.log(packetValue(packet));
-        // console.log(packet);
     });
 }
 
