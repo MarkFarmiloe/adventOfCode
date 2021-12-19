@@ -51,14 +51,6 @@ const getScannerInfo = lines => {
                 return c - z;
             }
         );
-        // .map(
-        //     ([a,b,c]) => {
-        //         const [aa, ab] = [Math.abs(a + b), Math.abs(a - b)];
-        //         const [ba, bb] = [Math.abs(b + c), Math.abs(b - c)];
-        //         const [ca, cb] = [Math.abs(c + a), Math.abs(c - a)];
-        //         return [a,b,c,aa,ab,ba,bb,ca,cb];
-        //     }
-        // );
 }
 
 const reorient = (s, o) => {
@@ -79,7 +71,6 @@ const reorient = (s, o) => {
 const locateAndReorient = (s0, s1) => {
     for (let i = 0; i < orientations.length; i++) {
         const s2 = reorient(s1, orientations[i]);
-        // console.log(s2);
         for (let j = 0; j < s0.length - 11; j++) {
             const p0 = s0[j];
             for (let k = 0; k < s2.length; k++) {
@@ -88,7 +79,6 @@ const locateAndReorient = (s0, s1) => {
                 const xMatches = s2.filter(pb => s0.some(pa => pa[0] - pb[0] === dx));
                 if (xMatches.length >= 12) {
                     const dy = p0[1] - p2[1];
-                    // console.log(i, j, k, dx, xMatches, dy);
                     const yMatches = s2.filter(pb => 
                         s0.some(pa => 
                             pa[0] - pb[0] === dx &&
@@ -96,7 +86,6 @@ const locateAndReorient = (s0, s1) => {
                         );
                     if (yMatches.length >= 12) {
                         const dz = p0[2] - p2[2];
-                        // console.log(i, j, k, dx, dy, yMatches, dz);
                         const zMatches = s2.filter(pb => 
                             s0.some(pa => 
                                 pa[0] - pb[0] === dx &&
@@ -104,7 +93,6 @@ const locateAndReorient = (s0, s1) => {
                                 pa[2] - pb[2] === dz)
                             );
                         if (zMatches.length >= 12) {
-                            // console.log(i, j, k, dx, dy, dz, zMatches);
                             return [[dx, dy, dz], s2];
                         }
                     }
@@ -123,8 +111,7 @@ const process = (err, data) => {
     if (err) throw err;
     const scanners = getData(data);
     let offsets = [[0,0,0]];
-    // console.log(scanners);
-    let rounds = 10;
+    let rounds = 10;  // fudge number to ensure infinite loop is avoided.
     while (rounds) {
         for (let i = 0; i < scanners.length; i++) {
             const scannerA = scanners[i];
@@ -134,10 +121,9 @@ const process = (err, data) => {
                     const offsetB = offsets[j];
                     if (offsetB) continue; // already located and reoriented this scanner.
                     const scannerB = scanners[j];
-                    // console.log(i, j);
                     const [offset, reoriented] = locateAndReorient(scannerA, scannerB);
                     if (offset) {
-                        offsets[j] = offset; //[offset[0] + offsetA[0], offset[1] + offsetA[1], offset[2] + offsetA[2]];
+                        offsets[j] = offset;
                         scanners[j] = reoriented.map(p => [p[0] + offset[0], p[1] + offset[1], p[2] + offset[2]]);
                     }
                 }
@@ -150,7 +136,7 @@ const process = (err, data) => {
         rounds--;
         if (allDone) rounds = 0;
     }
-    console.log(offsets);
+    // console.log(offsets);
     const points = scanners.reduce((a, s) => {
         return s.reduce((b, [p,q,r]) => {
             if (!b.some(([x,y,z]) => x === p && y === q && z === r)) b.push([p,q,r]);
@@ -166,7 +152,6 @@ const process = (err, data) => {
         }        
     }
     console.log(md);
-    // console.log(scanners[2].map(([a,b,c]) => [a-1105, b-1105, c-1105]));
 }
 
 // fs.readFile("./test.txt", 'utf8', process);
