@@ -79,7 +79,8 @@ const reorient = (s, o) => {
 const locateAndReorient = (s0, s1) => {
     for (let i = 0; i < orientations.length; i++) {
         const s2 = reorient(s1, orientations[i]);
-        for (let j = 0; j < s0.length - 12; j++) {
+        // console.log(s2);
+        for (let j = 0; j < s0.length - 11; j++) {
             const p0 = s0[j];
             for (let k = 0; k < s2.length; k++) {
                 const p2 = s2[k];
@@ -87,7 +88,7 @@ const locateAndReorient = (s0, s1) => {
                 const xMatches = s2.filter(pb => s0.some(pa => pa[0] - pb[0] === dx));
                 if (xMatches.length >= 12) {
                     const dy = p0[1] - p2[1];
-                    console.log(i, j, k, dx, xMatches, dy);
+                    // console.log(i, j, k, dx, xMatches, dy);
                     const yMatches = s2.filter(pb => 
                         s0.some(pa => 
                             pa[0] - pb[0] === dx &&
@@ -95,7 +96,7 @@ const locateAndReorient = (s0, s1) => {
                         );
                     if (yMatches.length >= 12) {
                         const dz = p0[2] - p2[2];
-                        console.log(i, j, k, dx, dy, yMatches, dz);
+                        // console.log(i, j, k, dx, dy, yMatches, dz);
                         const zMatches = s2.filter(pb => 
                             s0.some(pa => 
                                 pa[0] - pb[0] === dx &&
@@ -103,7 +104,7 @@ const locateAndReorient = (s0, s1) => {
                                 pa[2] - pb[2] === dz)
                             );
                         if (zMatches.length >= 12) {
-                            console.log(i, j, k, dx, dy, dz, zMatches);
+                            // console.log(i, j, k, dx, dy, dz, zMatches);
                             return [[dx, dy, dz], s2];
                         }
                     }
@@ -114,12 +115,16 @@ const locateAndReorient = (s0, s1) => {
     return [];
 }
 
+const getMD = ([a,b,c], [x,y,z]) => {
+    return Math.abs(a-x) + Math.abs(b-y) + Math.abs(c-z);
+}
+
 const process = (err, data) => {
     if (err) throw err;
     const scanners = getData(data);
     let offsets = [[0,0,0]];
-    console.log(scanners);
-    let rounds = 4;
+    // console.log(scanners);
+    let rounds = 10;
     while (rounds) {
         for (let i = 0; i < scanners.length; i++) {
             const scannerA = scanners[i];
@@ -129,7 +134,7 @@ const process = (err, data) => {
                     const offsetB = offsets[j];
                     if (offsetB) continue; // already located and reoriented this scanner.
                     const scannerB = scanners[j];
-                    console.log(i, j);
+                    // console.log(i, j);
                     const [offset, reoriented] = locateAndReorient(scannerA, scannerB);
                     if (offset) {
                         offsets[j] = offset; //[offset[0] + offsetA[0], offset[1] + offsetA[1], offset[2] + offsetA[2]];
@@ -146,9 +151,23 @@ const process = (err, data) => {
         if (allDone) rounds = 0;
     }
     console.log(offsets);
-    console.log(scanners);
-    console.log(scanners[2].map(([a,b,c]) => [a-1105, b-1105, c-1105]));
+    const points = scanners.reduce((a, s) => {
+        return s.reduce((b, [p,q,r]) => {
+            if (!b.some(([x,y,z]) => x === p && y === q && z === r)) b.push([p,q,r]);
+            return b;
+        }, a);
+    }, []);
+    console.log(points.length);
+    let md = 0;
+    for (let i = 0; i < offsets.length; i++) {
+        for (let j = i + 1; j < offsets.length; j++) {
+            const dist = getMD(offsets[i], offsets[j]);
+            md = md > dist ? md : dist;
+        }        
+    }
+    console.log(md);
+    // console.log(scanners[2].map(([a,b,c]) => [a-1105, b-1105, c-1105]));
 }
 
-fs.readFile("./test.txt", 'utf8', process);
-// fs.readFile("./input.txt", 'utf8', process);
+// fs.readFile("./test.txt", 'utf8', process);
+fs.readFile("./input.txt", 'utf8', process);
